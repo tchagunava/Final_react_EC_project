@@ -1,6 +1,6 @@
-import axios from "axios";
-import { useEffect, useState } from 'react';
-import './App.css';
+// import axios from "axios";
+// import { useEffect, useState } from 'react';
+// import './App.css';
 
 const instance = axios.create({
   baseURL: "http://localhost:3001/users",
@@ -170,4 +170,4 @@ function App() {
   );
 };
 
-export default App;
+// export default App;
