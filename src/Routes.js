@@ -1,8 +1,10 @@
 import { Route, Routes } from "react-router-dom";
-import { ProtectedRoute } from "./application";
+import { isUserAdmin, ProtectedRoute } from "./application";
 import { HomePage, LoginPage, ProductFormPage, RegisterPage } from "./pages";
+import { useUserInfo } from "./redux";
 
 export const RoutesComponent = () => {
+    const userInfo = useUserInfo();
     return (
         <Routes>
             <Route path="/" element={<HomePage />} />
@@ -11,7 +13,7 @@ export const RoutesComponent = () => {
             <Route
                 path="/products/new"
                 element={
-                    <ProtectedRoute>
+                    <ProtectedRoute hasAccess={isUserAdmin(userInfo)}>
                         <ProductFormPage />
                     </ProtectedRoute>
                 } />
