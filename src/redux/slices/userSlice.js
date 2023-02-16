@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import { axiosInstance } from "../../application";
 
 export const authenticateUser = createAsyncThunk(
@@ -6,7 +7,7 @@ export const authenticateUser = createAsyncThunk(
     async (values, { rejectWithValue }) => {
         try {
             const route = `/users/${values.isLogin ? "login" : "register"}`;
-            const { data } = await axiosInstance.post(route.values.formValues);
+            const { data } = await axiosInstance.post(route, values.formValues);
             localStorage.setItem("token", data.token);
             localStorage.setItem("refresh_token", data.refreshtoken);
             return data;
@@ -24,11 +25,11 @@ const userSlice = createSlice({
         loading: false,
         error: null,
     },
-    reducer: {
+    reducers: {
         logoutUser: (state) => {
             state.userInfo = null;
-            localStorage.removeItem("token")
-            localStorage.removeItem("refresh_token")
+            localStorage.removeItem("token");
+            localStorage.removeItem("refresh_token");
         },
     },
 

@@ -3,6 +3,7 @@ import { useForm } from "../../application/hooks/useForm";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { authenticateUser } from "../../redux";
+import { useNavigate } from "react-router-dom";
 
 
 const generateLoginFormValues = () => {
@@ -30,7 +31,9 @@ export const LoginForm = () => {
         defaultFormValues: generateLoginFormValues(),
     });
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const onLogin = (e) => {
         e.preventDefault()
         const email = loginFormValues.email.value;
@@ -41,10 +44,13 @@ export const LoginForm = () => {
                 formValues: {
                     email,
                     password,
-                }
+                },
             })
-        );
+        )
+            .unwrap()
+            .then(() => navigate("/"));
     };
+
     return (
         <FormControl>
             <TextField
@@ -52,7 +58,8 @@ export const LoginForm = () => {
                 label="email"
                 value={loginFormValues.email.value}
                 onChange={onInputChange}
-                error={loginFormValues.email.error}
+                error={!!loginFormValues.email.error}
+                helperText={loginFormValues.email.error}
 
             />
             <TextField
@@ -61,7 +68,8 @@ export const LoginForm = () => {
                 type="password"
                 value={loginFormValues.password.value}
                 onChange={onInputChange}
-                error={loginFormValues.password.error}
+                error={!!loginFormValues.password.error}
+                helperText={loginFormValues.password.error}
             />
             <Button onClick={onLogin}>login</Button>
         </FormControl>

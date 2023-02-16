@@ -9,7 +9,7 @@ const StyledAppBar = styled(AppBar)(() => ({
     width: "100%",
     padding: "0 100px 0 30px",
     display: "flex",
-    position: "unset",
+    // position: "unset",
 }));
 
 const StyledToolBar = styled(Toolbar)(() => ({

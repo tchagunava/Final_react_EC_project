@@ -1,2 +1,3 @@
-export { axiosInstance } from "./instance"
-export { getUserInitials } from "./utils"
+export { axiosInstance } from "./instance";
+export { getUserInitials, isUserAdmin } from "./utils";
+export { ProtectedRoute } from "./ProtectedRoute";

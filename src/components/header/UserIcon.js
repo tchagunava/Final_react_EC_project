@@ -2,7 +2,7 @@ import { Avatar, Box, Button, IconButton, Menu, MenuItem } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getUserInitials } from '../../application';
+import { getUserInitials, isUserAdmin } from '../../application';
 import { logoutUser, useUserInfo } from '../../redux';
 
 export const UserIcon = () => {
@@ -27,26 +27,35 @@ export const UserIcon = () => {
                         horizontal: "right",
                     }}
                     keepMounted
-                    // transformOrigin={{
-                    //     vertical: "top",
-                    //     horizontal: "left",
-                    // }}
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "left",
+                    }}
                     open={Boolean(anchor)}
                     onClose={() => setAnchor(null)}
                 >
                     {!!userData ? (
-                        <MenuItem onClick={() => dispatch(logoutUser)}>
+                        <MenuItem onClick={() => {
+                            dispatch(logoutUser());
+                            navigate("/");
+                        }}
+                        >
                             <Button>Logout</Button>
                         </MenuItem>
                     ) : (
-                        <>
+                        <Box>
                             <MenuItem onClick={() => navigate("/login")}>
                                 <Button>login</Button>
                             </MenuItem>
                             <MenuItem onClick={() => navigate("/register")}>
                                 <Button>Registration</Button>
                             </MenuItem>
-                        </>
+                        </Box>
+                    )}
+                    {isUserAdmin(userData) && (
+                        <MenuItem onClick={() => navigate("/products/new")}>
+                            <Button>add product</Button>
+                        </MenuItem>
                     )}
                 </Menu>
             </Box>
