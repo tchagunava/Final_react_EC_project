@@ -43,7 +43,7 @@ export const RegisterForm = () => {
     const { formValues, onInputChange } = useForm({
         defaultFormValues: generateRegisterFormValues(),
     });
-    console.log(formValues);
+    // console.log(formValues);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
