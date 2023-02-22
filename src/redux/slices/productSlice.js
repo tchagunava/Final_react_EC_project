@@ -3,12 +3,12 @@ import { axiosInstance } from "../../application";
 
 export const saveProduct = createAsyncThunk(
     "product/saveProduct",
-    async ({ product, isUpdating, id }, { rejectWithValue, }) => {
+    async ({ product, isUpdating, id }, { rejectWithValue, dispatch }) => {
         try {
             const endpoint = isUpdating ? `/products/${id}` : "/products";
             const method = isUpdating ? "put" : "post";
-
             const { data } = await axiosInstance[method](endpoint, { product });
+            dispatch(fetchHomePageProducts());
             return data;
         } catch (error) {
             return rejectWithValue("error during saving product");
@@ -18,13 +18,12 @@ export const saveProduct = createAsyncThunk(
 
 export const fetchHomePageProducts = createAsyncThunk(
     "product/fetchHomePageProducts",
-    async ({ product }, { rejectWithValue, dispatch }) => {
+    async (_, { rejectWithValue, }) => {
         try {
-            const { data } = await axiosInstance.get("products", { product });
-            dispatch(fetchHomePageProducts());
+            const { data } = await axiosInstance.get("/products");
             return data;
         } catch (error) {
-            return rejectWithValue("error during fetching homepage")
+            return rejectWithValue("error during fetching products");
         }
     }
 );
@@ -59,7 +58,7 @@ const productSlice = createSlice({
         });
         builder.addCase(fetchHomePageProducts.fulfilled, (state, action) => {
             state.loading = false;
-            state.fetchHomePageProducts = action.payload.products;
+            state.homePageProducts = action.payload.products;
             state.error = null;
         });
         builder.addCase(fetchHomePageProducts.rejected, (state, action) => {

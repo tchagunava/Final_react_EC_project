@@ -22,7 +22,7 @@ const generateAddProductFormValues = (selectedProduct) => {
         description: {
             value: selectedProduct?.description || "",
             required: true,
-            error: "",
+            eerror: "",
             validateInput: (description) =>
                 description.length > 1
                     ? null
@@ -57,12 +57,9 @@ const generateAddProductFormValues = (selectedProduct) => {
 
 export const ProductForm = () => {
     const {
-        formValues: productFormValues,
-        onInputChange,
-        setFormValues,
-    } = useForm({
-        defaultFormValues: generateAddProductFormValues(),
-    });
+        formValues: productFormValues, onInputChange, setFormvalues } = useForm({
+            defaultFormValues: generateAddProductFormValues(),
+        });
     const selectedProduct = useSelectedProduct();
     const [image, setImage] = useState("");
     const dispatch = useDispatch();
@@ -88,7 +85,7 @@ export const ProductForm = () => {
     };
     useEffect(() => {
         if (selectedProduct) {
-            setFormValues(generateAddProductFormValues(selectedProduct));
+            setFormvalues(generateAddProductFormValues(selectedProduct));
             setImage(selectedProduct.image);
         }
     }, [selectedProduct]);
