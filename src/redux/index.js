@@ -40,6 +40,7 @@ export {
     queryProducts,
     setSearchProducts,
     rateProduct,
+    fetchSingleProduct,
 } from "./slices/productSlice";
 
 export {
@@ -64,3 +65,7 @@ export const useCategoryProducts = () =>
     useSelector((state) => state.product.categoryProducts);
 export const useSearchResults = () =>
     useSelector((state) => state.product.searchResults);
+export const useSingleProduct = () =>
+    useSelector((state) => state.product.singleProduct);
+export const useProductLoading = () =>
+    useSelector((state) => state.product.loading);
