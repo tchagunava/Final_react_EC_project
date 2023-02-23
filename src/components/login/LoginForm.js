@@ -2,7 +2,7 @@ import { Button, FormControl, TextField, } from "@mui/material";
 import { useForm } from "../../application/hooks/useForm";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { authenticateUser } from "../../redux";
+import { authentificateUser } from "../../redux";
 import { useNavigate } from "react-router-dom";
 
 
@@ -39,7 +39,7 @@ export const LoginForm = () => {
         const email = loginFormValues.email.value;
         const password = loginFormValues.password.value;
         dispatch(
-            authenticateUser({
+            authentificateUser({
                 isLogin: true,
                 formValues: {
                     email,

@@ -6,8 +6,6 @@ import persistStore from "redux-persist/es/persistStore";
 import { useSelector } from "react-redux";
 import { productReducer } from "./slices/productSlice";
 import { cartReducer } from "./slices/cartSlice";
-
-
 const persistConfig = {
     key: "root",
     storage,
@@ -24,17 +22,25 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
     reducer: persistedReducer,
-    middleware: (getDfaultmiddleware) => getDfaultmiddleware({
-        serializableCheck: false,
-    }),
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
 });
 
 export const persistor = persistStore(store);
 
-
-export { authenticateUser } from "./slices/userSlice";
+export { authentificateUser } from "./slices/userSlice";
 export { logoutUser } from "./slices/userSlice";
-export { saveProduct, fetchHomePageProducts, setSelectedProduct } from "./slices/productSlice";
+export {
+    saveProduct,
+    fetchHomePageProducts,
+    setSelectedProduct,
+    fetchCategoryProducts,
+    queryProducts,
+    setSearchProducts,
+    rateProduct,
+} from "./slices/productSlice";
 
 export {
     fetchCart,
@@ -51,5 +57,10 @@ export const useSelectedProduct = () =>
 
 export const useHomePageProducts = () =>
     useSelector((state) => state.product.homePageProducts);
-
+export const useCategories = () =>
+    useSelector((state) => state.product.categories);
 export const useCart = () => useSelector((state) => state.cart.cartItems);
+export const useCategoryProducts = () =>
+    useSelector((state) => state.product.categoryProducts);
+export const useSearchResults = () =>
+    useSelector((state) => state.product.searchResults);

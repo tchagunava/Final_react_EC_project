@@ -3,7 +3,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../application/hooks/useForm';
-import { authenticateUser } from '../../redux';
+import { authentificateUser } from '../../redux';
 
 const generateRegisterFormValues = () => {
     return {
@@ -55,7 +55,7 @@ export const RegisterForm = () => {
         const email = formValues.email.value;
         const password = formValues.password.value;
         dispatch(
-            authenticateUser({
+            authentificateUser({
                 formValues: {
                     firstName,
                     lastName,

@@ -1,4 +1,6 @@
+// import { create } from "@mui/material/styles/createTransitions";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+// import { useDispatch } from "react-redux";
 import { axiosInstance } from "../../application";
 
 export const saveProduct = createAsyncThunk(
@@ -18,12 +20,57 @@ export const saveProduct = createAsyncThunk(
 
 export const fetchHomePageProducts = createAsyncThunk(
     "product/fetchHomePageProducts",
-    async (_, { rejectWithValue, }) => {
+    async (_, { rejectWithValue }) => {
         try {
             const { data } = await axiosInstance.get("/products");
             return data;
         } catch (error) {
             return rejectWithValue("error during fetching products");
+        }
+    }
+);
+
+export const fetchCategoryProducts = createAsyncThunk(
+    "product/fetchCategoryProducts",
+    async (url, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get(`/products/categories/${url}`);
+            return data;
+        } catch (error) {
+            return rejectWithValue("error during fetching category products");
+        }
+    }
+);
+
+export const queryProducts = createAsyncThunk(
+    "product/queryProducts",
+    async (name, { rejectWithValue }) => {
+        try {
+            const { data } = await axiosInstance.get("/products?name=${name}");
+            return data;
+        } catch (error) {
+            return rejectWithValue("Product not found");
+        }
+    }
+);
+
+export const rateProduct = createAsyncThunk(
+    "product/rateProduct",
+    async (
+        { productId, userId, rating, url, isHome },
+        { rejectWithValue, dispatch }
+    ) => {
+        try {
+            await axiosInstance.post(`/products/${productId}/users/${userId}/rate`, {
+                rating,
+            });
+            if (isHome) {
+                dispatch(fetchHomePageProducts());
+            } else {
+                dispatch(fetchCategoryProducts(url));
+            }
+        } catch (error) {
+            return rejectWithValue("error during rating product");
         }
     }
 );
@@ -35,10 +82,16 @@ const productSlice = createSlice({
         homePageProducts: [],
         error: null,
         selectedProduct: null,
+        categories: [],
+        categoryProducts: {},
+        searchResults: [],
     },
     reducers: {
         setSelectedProduct: (state, action) => {
             state.selectedProduct = action.payload;
+        },
+        setSearchProducts: (state) => {
+            state.searchResults = [];
         },
     },
     extraReducers: (builder) => {
@@ -59,9 +112,29 @@ const productSlice = createSlice({
         builder.addCase(fetchHomePageProducts.fulfilled, (state, action) => {
             state.loading = false;
             state.homePageProducts = action.payload.products;
+            state.categories = action.payload.categories;
             state.error = null;
         });
         builder.addCase(fetchHomePageProducts.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(fetchCategoryProducts.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(fetchCategoryProducts.fulfilled, (state, action) => {
+            state.loading = false;
+            state.categoryProducts = action.payload;
+        });
+        builder.addCase(fetchCategoryProducts.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(queryProducts.fulfilled, (state, action) => {
+            state.loading = false;
+            state.searchResults = action.payload.products;
+        });
+        builder.addCase(queryProducts.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
         });
@@ -69,4 +142,4 @@ const productSlice = createSlice({
 });
 
 export const productReducer = productSlice.reducer;
-export const { setSelectedProduct } = productSlice.actions;
+export const { setSelectedProduct, setSearchProducts } = productSlice.actions;
