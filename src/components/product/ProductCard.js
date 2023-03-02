@@ -60,7 +60,7 @@ export const ProductCard = ({
     return (
         <Grid item>
             <Card sx={{ width: 350, borderRadius: 3 }}>
-                <Link to={`/singleproductpage`} style={{ textDecoration: "none" }}>
+                <Link to={`/products/categories/${category}/${name}`} style={{ textDecoration: "none" }}>
                     <img
                         src={image}
                         alt={`${category}-${name}`}

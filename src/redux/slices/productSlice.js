@@ -46,7 +46,7 @@ export const queryProducts = createAsyncThunk(
     "product/queryProducts",
     async (name, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.get("/products?name=${name}");
+            const { data } = await axiosInstance.get(`/products?name=${name}`);
             return data;
         } catch (error) {
             return rejectWithValue("Product not found");
